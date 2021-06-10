@@ -1,10 +1,16 @@
 /* eslint-disable class-methods-use-this */
 import { Description, On, Guard } from "@typeit/discord";
-import { GuildMember, Invite, Message, PartialGuildMember } from "discord.js";
+import {
+  GuildMember,
+  Invite,
+  Message,
+  MessageEmbed,
+  PartialGuildMember,
+} from "discord.js";
 import IsAPrivateMessage from "./Guards/IsAPrivateMessage";
 import NotABot from "./Guards/NotABot";
 import Main from "./Main";
-import { userJoined, userRemoved } from "./service";
+import { getCommunityUrls, userJoined, userRemoved } from "./service";
 import logger from "./utils/logger";
 
 const existingInvites: Map<string, string[]> = new Map();
@@ -34,7 +40,19 @@ abstract class Events {
   @Guard(IsAPrivateMessage)
   onPrivateMessage(messages: [Message]): void {
     messages.forEach((message) => {
-      message.channel.send("Please visit our website: <url>");
+      getCommunityUrls(message.author.id).then((results) => {
+        const embed = new MessageEmbed()
+          .setColor("ea66e3")
+          .setTitle("Please visit your communities' websites")
+          .setAuthor(
+            "Agora Space",
+            "https://avatars.githubusercontent.com/u/83600655?s=200&v=4"
+          );
+        results.forEach((result) => {
+          embed.addField(result.name, result.url);
+        });
+        message.channel.send(embed);
+      });
     });
   }
 
