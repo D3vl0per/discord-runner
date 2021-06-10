@@ -6,6 +6,7 @@ import NotABot from "./Guards/NotABot";
 import Main from "./Main";
 import { getPrefixes, userJoined, userRemoved } from "./service";
 import logger from "./utils/logger";
+import { escapeRegExp } from "./utils/utils";
 
 const existingInvites: Map<string, string[]> = new Map();
 
@@ -14,7 +15,9 @@ abstract class Events {
   @On("ready")
   onReady(): void {
     getPrefixes().then((prefixResults) => {
-      Main.prefixes = new Map(prefixResults.map((x) => [x.serverId, x.prefix]));
+      Main.prefixes = new Map(
+        prefixResults.map((x) => [x.serverId, escapeRegExp(x.prefix)])
+      );
     });
 
     Main.Client.guilds.cache.forEach((guild) => {

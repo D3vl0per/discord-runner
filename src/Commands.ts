@@ -5,16 +5,15 @@ import NotABot from "./Guards/NotABot";
 import Main from "./Main";
 import { userJoined } from "./service";
 import logger from "./utils/logger";
-import { escapeRegExp } from "./utils/utils";
 import config from "./config";
 
 async function prefixBehaviour(message: Message) {
   const prefix = Main.prefixes.get(message.guild.id);
   if (prefix) {
-    return escapeRegExp(prefix);
+    return prefix;
   }
 
-  return escapeRegExp(config.defaultPrefix);
+  return config.defaultPrefix;
 }
 
 @Discord(prefixBehaviour)

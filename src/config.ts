@@ -1,4 +1,5 @@
 import * as dotenv from "dotenv";
+import { escapeRegExp } from "./utils/utils";
 
 const envFound = dotenv.config();
 if (envFound.error) {
@@ -7,7 +8,14 @@ if (envFound.error) {
 
 const discordToken = process.env.DISCORD_TOKEN;
 const backendUrl = process.env.BACKEND_URL;
-const defaultPrefix = process.env.DEFAULT_PREFIX || "!";
+
+let defaultPrefix: string;
+if (process.env.DEFAULT_PREFIX) {
+  defaultPrefix = escapeRegExp(process.env.DEFAULT_PREFIX);
+} else {
+  defaultPrefix = "!";
+}
+
 const api = {
   prefix: "/api",
   port: process.env.PORT || 8990,
