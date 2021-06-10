@@ -1,12 +1,22 @@
 /* eslint-disable class-methods-use-this */
 import { Discord, CommandMessage, Command, Guard } from "@typeit/discord";
-import config from "./config";
+import { Message } from "discord.js";
 import NotABot from "./Guards/NotABot";
 import Main from "./Main";
 import { userJoined } from "./service";
 import logger from "./utils/logger";
+import { escapeRegExp } from "./utils/utils";
 
-@Discord(config.prefix)
+async function prefixBehaviour(message: Message) {
+  const prefix = Main.prefixes.get(message.guild.id);
+  if (prefix) {
+    return escapeRegExp(prefix);
+  }
+
+  return "!";
+}
+
+@Discord(prefixBehaviour)
 abstract class Commands {
   @Command("ping")
   @Guard(NotABot)

@@ -6,6 +6,8 @@ import config from "./config";
 class Main {
   private static _client: Client;
 
+  static prefixes: Map<string, string>;
+
   static get Client(): Client {
     return this._client;
   }

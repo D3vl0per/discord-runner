@@ -4,7 +4,7 @@ import { GuildMember, Invite, Message, PartialGuildMember } from "discord.js";
 import IsAPrivateMessage from "./Guards/IsAPrivateMessage";
 import NotABot from "./Guards/NotABot";
 import Main from "./Main";
-import { userJoined, userRemoved } from "./service";
+import { getPrefixes, userJoined, userRemoved } from "./service";
 import logger from "./utils/logger";
 
 const existingInvites: Map<string, string[]> = new Map();
@@ -13,7 +13,10 @@ const existingInvites: Map<string, string[]> = new Map();
 abstract class Events {
   @On("ready")
   onReady(): void {
-    logger.info("Bot logged in.");
+    getPrefixes().then((prefixResults) => {
+      Main.prefixes = new Map(prefixResults.map((x) => [x.serverId, x.prefix]));
+    });
+
     Main.Client.guilds.cache.forEach((guild) => {
       guild
         .fetchInvites()
@@ -27,6 +30,8 @@ abstract class Events {
         })
         .catch(logger.error);
     });
+
+    logger.info("Bot logged in.");
   }
 
   @On("message")
