@@ -28,7 +28,7 @@ Create a new file called .env and add the following environment variables:
 
 ```bash
 DISCORD_TOKEN="KJlrEsMLydUXvJaaSRZDSmvD.pLQtsV.FJUJliPzZjgPhujkuhkOiBroWBk"
-PREFIX="!"
+DEFAULT_PREFIX="!"
 BACKEND_URL="https://agora.space/api/"
 ```
 

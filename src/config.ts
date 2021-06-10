@@ -7,7 +7,7 @@ if (envFound.error) {
 
 const discordToken = process.env.DISCORD_TOKEN;
 const backendUrl = process.env.BACKEND_URL;
-const prefix = process.env.PREFIX || "!";
+const defaultPrefix = process.env.DEFAULT_PREFIX || "!";
 const api = {
   prefix: "/api",
   port: process.env.PORT || 8990,
@@ -25,6 +25,6 @@ if (!backendUrl) {
 export default {
   discordToken,
   backendUrl,
-  prefix,
+  defaultPrefix,
   api,
 };

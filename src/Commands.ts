@@ -6,6 +6,7 @@ import Main from "./Main";
 import { userJoined } from "./service";
 import logger from "./utils/logger";
 import { escapeRegExp } from "./utils/utils";
+import config from "./config";
 
 async function prefixBehaviour(message: Message) {
   const prefix = Main.prefixes.get(message.guild.id);
@@ -13,7 +14,7 @@ async function prefixBehaviour(message: Message) {
     return escapeRegExp(prefix);
   }
 
-  return "!";
+  return escapeRegExp(config.defaultPrefix);
 }
 
 @Discord(prefixBehaviour)
