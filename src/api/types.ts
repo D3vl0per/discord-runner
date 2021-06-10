@@ -29,10 +29,16 @@ class ActionError extends Error {
   }
 }
 
+type PrefixResult = {
+  serverId: string;
+  prefix: string;
+};
+
 export {
   ManageRolesParams,
   UserResult,
   InviteResult,
   ErrorResult,
   ActionError,
+  PrefixResult,
 };

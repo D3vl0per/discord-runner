@@ -1,4 +1,5 @@
 import axios from "axios";
+import { PrefixResult } from "./api/types";
 import config from "./config";
 import logger from "./utils/logger";
 
@@ -32,4 +33,9 @@ function userRemoved(idFromPlatform: string, sender: string) {
     .catch(logger.error);
 }
 
-export { userJoined, userRemoved };
+async function getPrefixes(): Promise<PrefixResult[]> {
+  const result = await axios.get(`${API_BASE_URL}/community/prefix/all`);
+  return result.data;
+}
+
+export { userJoined, userRemoved, getPrefixes };

@@ -43,4 +43,8 @@ function getErrorResult(error: Error): ErrorResult {
   };
 }
 
-export { getUserResult, getErrorResult };
+function escapeRegExp(string: string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+export { getUserResult, getErrorResult, escapeRegExp };
