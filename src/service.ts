@@ -1,4 +1,5 @@
 import axios from "axios";
+import { CommunityUrlResult } from "./api/types";
 import config from "./config";
 import logger from "./utils/logger";
 
@@ -32,4 +33,13 @@ function userRemoved(idFromPlatform: string, sender: string) {
     .catch(logger.error);
 }
 
-export { userJoined, userRemoved };
+async function getCommunityUrls(
+  idFromPlatform: string
+): Promise<CommunityUrlResult[]> {
+  const result = await axios.get(
+    `${API_BASE_URL}/community/url/${idFromPlatform}`
+  );
+  return result.data;
+}
+
+export { userJoined, userRemoved, getCommunityUrls };

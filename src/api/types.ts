@@ -29,10 +29,16 @@ class ActionError extends Error {
   }
 }
 
+type CommunityUrlResult = {
+  name: string;
+  url: string;
+};
+
 export {
   ManageRolesParams,
   UserResult,
   InviteResult,
   ErrorResult,
   ActionError,
+  CommunityUrlResult,
 };
