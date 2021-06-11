@@ -8,9 +8,11 @@ import logger from "./utils/logger";
 import config from "./config";
 
 async function prefixBehaviour(message: Message) {
-  const prefix = Main.prefixes.get(message.guild.id);
-  if (prefix) {
-    return prefix;
+  if (message.channel.type !== "dm") {
+    const prefix = Main.prefixes.get(message.guild.id);
+    if (prefix) {
+      return prefix;
+    }
   }
 
   return config.defaultPrefix;
