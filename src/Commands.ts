@@ -1,13 +1,15 @@
 /* eslint-disable class-methods-use-this */
-import { Discord, Option, Slash } from "@typeit/discord";
+import { Discord, Guard, Option, Slash } from "@typeit/discord";
 import { CommandInteraction } from "discord.js";
 import Main from "./Main";
 import { userJoined } from "./service";
 import "reflect-metadata";
+import NotABot from "./Guards/NotABot";
 
 @Discord()
 abstract class Commands {
   @Slash("ping")
+  @Guard(NotABot)
   ping(interaction: CommandInteraction): void {
     interaction.reply(
       `Latency is ${
@@ -17,6 +19,7 @@ abstract class Commands {
   }
 
   @Slash("join")
+  @Guard(NotABot)
   join(
     @Option("code", {
       description: "the join code provided at the website",
