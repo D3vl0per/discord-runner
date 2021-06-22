@@ -13,9 +13,9 @@ const manageRoles = async (
   params: ManageRolesParams,
   isUpgrade: boolean
 ): Promise<UserResult> => {
-  const guild = await Main.Client.guilds.fetch(`${BigInt(params.guildId)}`);
+  const guild = await Main.Client.guilds.fetch(params.guildId as `${bigint}`);
 
-  const member = await guild.members.fetch(`${BigInt(params.userId)}`);
+  const member = await guild.members.fetch(params.userId as `${bigint}`);
 
   const roleManager = await guild.roles.fetch();
 
@@ -26,7 +26,7 @@ const manageRoles = async (
   if (rolesToManage.size !== params.roleIds.length) {
     const missingRoleIds = params.roleIds.filter(
       (roleId) =>
-        !rolesToManage.map((role) => role.id).includes(`${BigInt(roleId)}`)
+        !rolesToManage.map((role) => role.id).includes(roleId as `${bigint}`)
     );
     throw new ActionError("missing role(s)", missingRoleIds);
   }
@@ -44,7 +44,7 @@ const manageRoles = async (
 };
 
 const generateInvite = async (guildId: string): Promise<InviteResult> => {
-  const guild = await Main.Client.guilds.fetch(`${BigInt(guildId)}`);
+  const guild = await Main.Client.guilds.fetch(guildId as `${bigint}`);
 
   const invite = await guild.systemChannel.createInvite({
     maxAge: 60 * 15,
@@ -61,17 +61,17 @@ const isMember = async (
   guildId: string,
   userId: string
 ): Promise<UserResult> => {
-  const guild = await Main.Client.guilds.fetch(`${BigInt(guildId)}`);
+  const guild = await Main.Client.guilds.fetch(guildId as `${bigint}`);
 
-  const member = await guild.members.fetch(`${BigInt(userId)}`);
+  const member = await guild.members.fetch(userId as `${bigint}`);
 
   return getUserResult(member);
 };
 
 const removeUser = async (guildId: string, userId: string): Promise<void> => {
-  const guild = await Main.Client.guilds.fetch(`${BigInt(guildId)}`);
+  const guild = await Main.Client.guilds.fetch(guildId as `${bigint}`);
 
-  const member = await guild.members.fetch(`${BigInt(userId)}`);
+  const member = await guild.members.fetch(userId as `${bigint}`);
 
   await member.kick();
 };
