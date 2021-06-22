@@ -6,7 +6,7 @@ const API_BASE_URL = config.backendUrl;
 const PLATFORM = "discord";
 
 const userJoined = async (
-  refId: string,
+  refId: number | string,
   platformUserId: string,
   serverId: string,
   isJoinCode: boolean
