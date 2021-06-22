@@ -1,37 +1,38 @@
 /* eslint-disable class-methods-use-this */
-import { Discord, CommandMessage, Command, Guard } from "@typeit/discord";
-import config from "./config";
-import NotABot from "./Guards/NotABot";
+import { Discord, Option, Slash } from "@typeit/discord";
+import { CommandInteraction } from "discord.js";
 import Main from "./Main";
 import { userJoined } from "./service";
+import "reflect-metadata";
 
-@Discord(config.prefix)
+@Discord()
 abstract class Commands {
-  @Command("ping")
-  @Guard(NotABot)
-  ping(command: CommandMessage): void {
-    command.reply(
+  @Slash("ping")
+  ping(interaction: CommandInteraction): void {
+    interaction.reply(
       `Latency is ${
-        Date.now() - command.createdTimestamp
+        Date.now() - interaction.createdTimestamp
       }ms. API Latency is ${Math.round(Main.Client.ws.ping)}ms`
     );
   }
 
-  @Command("join :joinCode")
-  @Guard(NotABot)
-  join(command: CommandMessage): void {
-    const { joinCode } = command.args;
-    userJoined(joinCode, command.author.id, command.guild?.id, true).then(
+  @Slash("join")
+  join(
+    @Option("code", {
+      description: "the join code provided at the website",
+      required: true,
+    })
+    joinCode: number,
+    interaction: CommandInteraction
+  ): void {
+    userJoined(joinCode, interaction.user.id, interaction.guild?.id, true).then(
       (ok) => {
         const message = ok
           ? "You have successfully joined."
           : "Join failed. (wrong join code)";
-        command.author.send(message);
+        interaction.reply(message);
       }
     );
-    if (command.channel.type !== "dm") {
-      command.delete();
-    }
   }
 }
 

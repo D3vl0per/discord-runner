@@ -15,12 +15,13 @@
     "prod": "node build/Main.js"
   },
   "dependencies": {
-    "@typeit/discord": "^4.0.9",
+    "@typeit/discord": "^5.0.13",
     "axios": "^0.21.1",
-    "discord.js": "^12.5.3",
+    "discord.js": "https://github.com/discordjs/discord.js",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "express-validator": "^6.11.1",
+    "reflect-metadata": "^0.1.13",
     "winston": "^3.3.3"
   },
   "devDependencies": {
