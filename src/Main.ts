@@ -3,7 +3,6 @@ import { Client } from "@typeit/discord";
 import { Intents } from "discord.js";
 import api from "./api/api";
 import config from "./config";
-import NotABot from "./Guards/NotABot";
 import "reflect-metadata";
 import logger from "./utils/logger";
 
@@ -18,8 +17,12 @@ class Main {
     api();
 
     this._client = new Client({
-      intents: [Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_PRESENCES],
-      guards: [NotABot],
+      intents: [
+        Intents.FLAGS.GUILD_MEMBERS,
+        Intents.FLAGS.GUILD_PRESENCES,
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_INVITES,
+      ],
       slashGuilds:
         config.nodeEnv === "development" ? [config.testGuildId] : undefined,
     });

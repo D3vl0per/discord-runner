@@ -1,13 +1,14 @@
 /* eslint-disable class-methods-use-this */
-import { Description, On } from "@typeit/discord";
+import { Discord, On } from "@typeit/discord";
 import { GuildMember, Invite, PartialGuildMember } from "discord.js";
 import Main from "./Main";
 import { userJoined, userRemoved } from "./service";
 import logger from "./utils/logger";
+import "reflect-metadata";
 
 const existingInvites: Map<string, string[]> = new Map();
 
-@Description("Event listeners.")
+@Discord()
 abstract class Events {
   @On("ready")
   onReady(): void {
