@@ -15,6 +15,7 @@
     "prod": "node build/Main.js"
   },
   "dependencies": {
+    "@discordjs/voice": "^0.5.0",
     "@typeit/discord": "^5.0.13",
     "axios": "^0.21.1",
     "discord.js": "https://github.com/discordjs/discord.js",

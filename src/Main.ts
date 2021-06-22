@@ -20,7 +20,8 @@ class Main {
     this._client = new Client({
       intents: [Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_PRESENCES],
       guards: [NotABot],
-      slashGuilds: process.env.NODE_ENV ? undefined : ["844222532994727957"],
+      slashGuilds:
+        config.nodeEnv === "development" ? [config.testGuildId] : undefined,
     });
 
     this._client.login(
@@ -30,7 +31,11 @@ class Main {
     );
 
     this._client.once("ready", async () => {
-      await this._client.clearSlashes();
+      if (config.nodeEnv === "development") {
+        await this._client.clearSlashes(config.testGuildId);
+      } else {
+        await this._client.clearSlashes();
+      }
       await this._client.initSlashes();
 
       logger.info("Bot started");
