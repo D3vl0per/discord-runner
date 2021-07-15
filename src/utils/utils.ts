@@ -2,7 +2,7 @@ import { DiscordAPIError, GuildMember, MessageEmbed, User } from "discord.js";
 import { ActionError, ErrorResult, UserResult } from "../api/types";
 import config from "../config";
 import { userJoined } from "../service";
-import logger from "./logger";
+import { logger } from "./logger";
 
 const getUserResult = (member: GuildMember): UserResult => ({
   username: member.user.username,

@@ -21,6 +21,7 @@
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "express-validator": "^6.11.1",
+    "express-winston": "^4.1.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {

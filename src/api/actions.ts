@@ -1,6 +1,6 @@
 import { Collection, GuildMember, Role } from "discord.js";
 import Main from "../Main";
-import logger from "../utils/logger";
+import { logger } from "../utils/logger";
 import {
   ActionError,
   InviteResult,

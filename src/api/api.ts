@@ -1,10 +1,13 @@
 import express from "express";
 import config from "../config";
-import logger from "../utils/logger";
+import { createWinstonDevLogger } from "../utils/dev-logger";
+import { logger } from "../utils/logger";
 import router from "./router";
 
 const createApi = () => {
   const api = express();
+
+  api.use(createWinstonDevLogger());
 
   api.use(express.json());
   api.use(config.api.prefix, router());

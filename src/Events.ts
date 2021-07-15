@@ -13,7 +13,7 @@ import IsAPrivateMessage from "./Guards/IsAPrivateMessage";
 import NotABot from "./Guards/NotABot";
 import Main from "./Main";
 import { userJoined, userRemoved } from "./service";
-import logger from "./utils/logger";
+import { logger } from "./utils/logger";
 import { getRequestJoinCodeEmbed, handleJoinCode } from "./utils/utils";
 
 const existingInvites: Map<string, string[]> = new Map();

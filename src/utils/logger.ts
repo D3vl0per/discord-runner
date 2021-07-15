@@ -1,9 +1,15 @@
-import createDevLogger from "./dev-logger";
+import { createDevLogger, createWinstonDevLogger } from "./dev-logger";
 
 const logger =
-  process.env.NODE_ENV === "development"
+  process.env.node_env === "development"
     ? createDevLogger()
     : // TODO: production logger
       createDevLogger();
 
-export default logger;
+const winstonLogger =
+  process.env.node_env === "development"
+    ? createWinstonDevLogger()
+    : // TODO: production logger
+      createWinstonDevLogger();
+
+export { logger, winstonLogger };
