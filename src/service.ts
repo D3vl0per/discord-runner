@@ -33,14 +33,17 @@ const userJoined = async (
 const userRemoved = async (dcUserId: string, serverId: string) => {
   const userHash = await getUserHash(dcUserId);
   logger.verbose(`userRemoved userHash - ${userHash}`);
-  axios
-    .post(`${API_BASE_URL}/user/removeFromPlatform`, {
+  try {
+    await axios.post(`${API_BASE_URL}/user/removeFromPlatform`, {
       platform: PLATFORM,
       platformUserId: userHash,
       serverId,
       triggerKick: false,
-    })
-    .catch(logBackendError);
+    });
+  } catch (error) {
+    logger.verbose("userRemoved error");
+    logBackendError(error);
+  }
 };
 
 const statusUpdate = async (
