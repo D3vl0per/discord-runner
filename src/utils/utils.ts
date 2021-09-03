@@ -48,16 +48,18 @@ const getErrorResult = (error: Error): ErrorResult => {
   };
 };
 
-const logBackendError = (error) => {
+const logBackendError = (error: {
+  response: { data: { errors: string | any[] } };
+}) => {
   if (
     error.response?.data?.errors?.length > 0 &&
     error.response?.data?.errors[0]?.msg
   ) {
     logger.error(error.response.data.errors[0].msg);
   } else if (error.response?.data) {
-    logger.error(error.response.data);
+    logger.error(JSON.stringify(error.response.data));
   } else {
-    logger.error(error);
+    logger.error(JSON.stringify(error));
   }
 };
 
