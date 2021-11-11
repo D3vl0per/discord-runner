@@ -27,6 +27,7 @@ import {
   getUserResult,
 } from "../utils/utils";
 import config from "../config";
+import { getGuilds } from "../service";
 
 const notifyAccessedChannels = async (
   member: GuildMember | PartialGuildMember,
@@ -438,6 +439,32 @@ const updateRoleByName = async (
   return rolesUpdated.filter((r) => r !== undefined);
 };
 
+const getRoleIds = async () => {
+  logger.verbose(`getRoleIds`);
+  const guilds: any = await getGuilds();
+  const roles = [];
+  await Promise.all(
+    guilds.map(async (g) => {
+      try {
+        const guild = await Main.Client.guilds.fetch(
+          g.guildPlatforms[0].platformId
+        );
+        console.log(guild.name);
+        const role = guild.roles.cache.find(
+          (r) => r.name.toLowerCase() === g.name.toLowerCase()
+        );
+        roles.push(
+          `update "GuildPlatforms" set "roleId"='${role.id}' where "guildId"=${g.id};`
+        );
+      } catch (error) {
+        logger.error(error);
+      }
+    })
+  );
+  logger.verbose(roles);
+  logger.verbose(JSON.stringify(roles));
+};
+
 export {
   manageRoles,
   generateInvite,
@@ -452,4 +479,5 @@ export {
   getCategories,
   deleteChannelAndRole,
   updateRoleByName,
+  getRoleIds,
 };

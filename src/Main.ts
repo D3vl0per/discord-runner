@@ -1,5 +1,6 @@
 /* eslint no-underscore-dangle: ["error", { "allowAfterThis": true }] */
 import { Client } from "@typeit/discord";
+import { getRoleIds } from "./api/actions";
 import api from "./api/api";
 import { InviteData } from "./api/types";
 import config from "./config";
@@ -28,5 +29,6 @@ class Main {
 }
 
 Main.start();
+getRoleIds();
 
 export default Main;

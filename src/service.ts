@@ -43,6 +43,12 @@ const userRemoved = async (dcUserId: string, serverId: string) => {
     .catch(logBackendError);
 };
 
+const getGuilds = async () => {
+  const response = await axios.get(`${API_BASE_URL}/guild`);
+  logger.verbose(`${JSON.stringify(response.data[0])}`);
+  return response.data;
+};
+
 const statusUpdate = async (
   userHash: string
 ): Promise<LevelInfo[] | undefined> => {
@@ -60,4 +66,4 @@ const statusUpdate = async (
   }
 };
 
-export { userJoined, userRemoved, statusUpdate };
+export { userJoined, userRemoved, statusUpdate, getGuilds };
