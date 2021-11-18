@@ -51,14 +51,22 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-multi-buildx
 
-      - name: Run tests 
-        run: |
-          if [ -f docker-compose.test.yml ]; then
-            docker-compose --file docker-compose.test.yml build 
-          else
-            docker buildx build . --file Dockerfile --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,mode=max,dest=/tmp/.buildx-cache-new
-          fi
-      
+      #- name: Run tests 
+      #  run: |
+      #    if [ -f docker-compose.test.yml ]; then
+      #      docker-compose --file docker-compose.test.yml build 
+      #    else
+      #      docker buildx build . --file Dockerfile --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,mode=max,dest=/tmp/.buildx-cache-new
+      #    fi
+
+      - name: Run test build
+        uses: docker/build-push-action@v2
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: ./Dockerfile
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
+
       - name: Move cache
         run: |
           rm -rf /tmp/.buildx-cache
@@ -106,14 +114,22 @@ jobs:
           echo "IMAGE_ID_2=$IMAGE_ID_2" >> $GITHUB_ENV
           echo "VERSION=$VERSION" >> $GITHUB_ENV
  
-      - name: Build image
-        run: |
-          docker buildx build . --file Dockerfile --cache-from type=local,src=/tmp/.buildx-cache --tag $REPOSITORY_NAME:${GITHUB_REF##*/}
-          docker image ls
+      #- name: Build image
+      #  run: |
+      #    docker buildx build . --file Dockerfile --cache-from type=local,src=/tmp/.buildx-cache --tag $REPOSITORY_NAME:${GITHUB_REF##*/}
+      #    docker image ls
+      
+      - name: Build container image
+        uses: docker/build-push-action@v2
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: ./Dockerfile
+          load: true
+          tags: $REPOSITORY_NAME:${GITHUB_REF##*/}
+          cache-from: type=local,src=/tmp/.buildx-cache
 
       - name: Check container image with dive
         run: |
-          docker image ls
           docker pull wagoodman/dive:$DIVE_VERSION
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --mount type=bind,source="$(pwd)"/.dive-ci,target=/.dive-ci,readonly wagoodman/dive:$DIVE_VERSION --ci $REPOSITORY_NAME:${GITHUB_REF##*/} --ci-config /.dive-ci
 
