@@ -107,19 +107,28 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
  
       - name: Build image
-        run: docker buildx build . --file Dockerfile --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,mode=max,dest=/tmp/.buildx-cache-new --tag $REPOSITORY_NAME:${GITHUB_REF##*/}
+        run: docker buildx build . --file Dockerfile --cache-from type=local,src=/tmp/.buildx-cache --tag $REPOSITORY_NAME:${GITHUB_REF##*/}
 
       - name: Check container image with dive
         run: |
+          docker image ls
           docker pull wagoodman/dive:$DIVE_VERSION
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --mount type=bind,source="$(pwd)"/.dive-ci,target=/.dive-ci,readonly wagoodman/dive:$DIVE_VERSION --ci $REPOSITORY_NAME:${GITHUB_REF##*/} --ci-config /.dive-ci
 
-      - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-
-      - name: Log into own registry
-        run: echo "${{ secrets.DOCKER_API_TOKEN }}" | docker login ${{ secrets.DOCKER_REPO }} -u '${{ secrets.DOCKER_LOGIN_NAME }}' --password-stdin
-
+      - name: Login to Github Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: docker.pkg.github.com
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Login to External Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ secrets.DOCKER_REPO }}
+          username: ${{ secrets.DOCKER_LOGIN_NAME }}
+          password: ${{ secrets.DOCKER_API_TOKEN }}
+      
       - name: Tag the container images
         run: |
           docker tag $REPOSITORY_NAME:${GITHUB_REF##*/} $IMAGE_ID:$VERSION
