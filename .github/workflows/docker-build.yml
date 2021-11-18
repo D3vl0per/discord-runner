@@ -2,11 +2,10 @@ name: Branch based docker build and publish
 
 on:
   push: 
-    branches:
-
+    branches:    
+      - '*'
     tags:
       - v*
-
   pull_request:
 
 env:
@@ -50,12 +49,12 @@ jobs:
     name: Build and publish the conatiner image
     needs: test
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true )
+    if: github.event_name == 'push' || github.event.pull_request.merged == true
     steps:
       - uses: actions/checkout@v2
 
       - name: TEST Get current repository name
-        run: echo ::set-env name=REPOSITORY_NAME::$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//")
+        run: echo "REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//")" >> $GITHUB_ENV
         shell: bash
 
       - name: TEST Validate REPOSITORY_NAME output
