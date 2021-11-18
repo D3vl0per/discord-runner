@@ -59,6 +59,11 @@ jobs:
             docker buildx build . --file Dockerfile --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,mode=max,dest=/tmp/.buildx-cache-new
           fi
       
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache      
+  
   push:
     name: Build and publish the conatiner image
     needs: test
@@ -107,7 +112,7 @@ jobs:
       - name: Check container image with dive
         run: |
           docker pull wagoodman/dive:$DIVE_VERSION
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --mount type=bind,source="$(pwd)"/.dive-ci,target=/.dive-ci,readonly wagoodman/dive:$DIVE_VERSION --ci $IMAGE_ID:$VERSION --ci-config /.dive-ci
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --mount type=bind,source="$(pwd)"/.dive-ci,target=/.dive-ci,readonly wagoodman/dive:$DIVE_VERSION --ci $REPOSITORY_NAME:${GITHUB_REF##*/} --ci-config /.dive-ci
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
