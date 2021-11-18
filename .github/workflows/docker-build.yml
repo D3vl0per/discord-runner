@@ -54,7 +54,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: TEST Get current repository name
-        run: echo ::set-env name=REPOSITORY_NAME::$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//")
+        run: ::REPOSITORY_NAME::`echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//"`
         shell: bash
 
       - name: TEST Validate REPOSITORY_NAME output
