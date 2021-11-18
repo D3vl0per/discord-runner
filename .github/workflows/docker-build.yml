@@ -2,8 +2,8 @@ name: Branch based docker build and publish
 
 on:
   push: 
-    branches:    
-      - '*'
+    branches-ignore:
+      - 'main'
     tags:
       - v*
   pull_request:
@@ -15,7 +15,7 @@ jobs:
   scanning:
     name: GitGuardian scan
     runs-on: ubuntu-latest
-    if:  github.event.pull_request.merged == false
+    if:  github.event.pull_request.merged != true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -34,7 +34,7 @@ jobs:
     name: Test container build
     needs: scanning
     runs-on: ubuntu-latest
-    if:  github.event.pull_request.merged == false
+    if:  github.event.pull_request.merged != true
     steps:
       - uses: actions/checkout@v2
       
