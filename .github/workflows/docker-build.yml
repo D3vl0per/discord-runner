@@ -1,12 +1,14 @@
 name: Branch based docker build and publish
 
 on:
-  push: 
-    branches-ignore:
-      - 'main'
+  push:
+    branches:
+     - '*' 
+    # branches-ignore:
+    #  - 'main'
     tags:
       - v*
-  pull_request:
+#  pull_request:
 
 env:
   DIVE_VERSION: v0.10
