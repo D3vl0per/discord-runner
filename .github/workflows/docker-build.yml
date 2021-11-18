@@ -132,6 +132,7 @@ jobs:
 
       - name: Check container image with dive
         run: |
+          docker image ls
           docker pull wagoodman/dive:$DIVE_VERSION
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --mount type=bind,source="$(pwd)"/.dive-ci,target=/.dive-ci,readonly wagoodman/dive:$DIVE_VERSION --ci ${{ steps.prep.outputs.tags }} --ci-config /.dive-ci
 
