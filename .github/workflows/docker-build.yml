@@ -107,7 +107,9 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
  
       - name: Build image
-        run: docker buildx build . --file Dockerfile --cache-from type=local,src=/tmp/.buildx-cache --tag $REPOSITORY_NAME:${GITHUB_REF##*/}
+        run: |
+          docker buildx build . --file Dockerfile --cache-from type=local,src=/tmp/.buildx-cache --tag $REPOSITORY_NAME:${GITHUB_REF##*/}
+          docker image ls
 
       - name: Check container image with dive
         run: |
