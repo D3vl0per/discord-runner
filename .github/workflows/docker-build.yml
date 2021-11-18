@@ -127,13 +127,13 @@ jobs:
           context: .
           file: Dockerfile
           load: true
-          tags: ${{ $REPOSITORY_NAME:${GITHUB_REF##*/} }}
+          tags: ${{ steps.prep.outputs.tags }}
           cache-from: type=local,src=/tmp/.buildx-cache
 
       - name: Check container image with dive
         run: |
           docker pull wagoodman/dive:$DIVE_VERSION
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --mount type=bind,source="$(pwd)"/.dive-ci,target=/.dive-ci,readonly wagoodman/dive:$DIVE_VERSION --ci $REPOSITORY_NAME:${GITHUB_REF##*/} --ci-config /.dive-ci
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --mount type=bind,source="$(pwd)"/.dive-ci,target=/.dive-ci,readonly wagoodman/dive:$DIVE_VERSION --ci ${{ steps.prep.outputs.tags }} --ci-config /.dive-ci
 
       - name: Login to Github Container Registry
         uses: docker/login-action@v1
@@ -151,8 +151,8 @@ jobs:
       
       - name: Tag the container images
         run: |
-          docker tag $REPOSITORY_NAME:${GITHUB_REF##*/} $IMAGE_ID:$VERSION
-          docker tag $REPOSITORY_NAME:${GITHUB_REF##*/} $IMAGE_ID_2:$VERSION
+          docker tag ${{ steps.prep.outputs.tags }} $IMAGE_ID:$VERSION
+          docker tag ${{ steps.prep.outputs.tags }} $IMAGE_ID_2:$VERSION
 
       - name: Push container image to Github Container Registry 
         run: docker push $IMAGE_ID:$VERSION
