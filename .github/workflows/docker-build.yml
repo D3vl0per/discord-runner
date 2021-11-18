@@ -2,11 +2,8 @@ name: Branch based docker build and publish
 
 on:
   push: 
-    branches:
-
     tags:
       - v*
-
   pull_request:
 
 env:
@@ -50,7 +47,7 @@ jobs:
     name: Build and publish the conatiner image
     needs: test
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true )
+    if: github.event_name == 'push' || github.event.pull_request.merged == true
     steps:
       - uses: actions/checkout@v2
 
