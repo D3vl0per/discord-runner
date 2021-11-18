@@ -127,7 +127,7 @@ jobs:
           context: .
           file: Dockerfile
           load: true
-          tags: $REPOSITORY_NAME:${GITHUB_REF##*/}
+          tags: ${{ $REPOSITORY_NAME:${GITHUB_REF##*/} }}
           cache-from: type=local,src=/tmp/.buildx-cache
 
       - name: Check container image with dive
