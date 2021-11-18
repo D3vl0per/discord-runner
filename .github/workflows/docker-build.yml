@@ -56,7 +56,7 @@ jobs:
           if [ -f docker-compose.test.yml ]; then
             docker-compose --file docker-compose.test.yml build 
           else
-            docker buildx build . --file Dockerfile --cache-from type=local,src=/tmp/.buildx-cache type=local,mode=max,dest=/tmp/.buildx-cache-new --cache-to type=local,mode=max,dest=/tmp/.buildx-cache-new --tag $REPOSITORY_NAME:${GITHUB_REF##*/}
+            docker buildx build --file Dockerfile --cache-from type=local,src=/tmp/.buildx-cache type=local,mode=max,dest=/tmp/.buildx-cache-new --cache-to type=local,mode=max,dest=/tmp/.buildx-cache-new --tag $REPOSITORY_NAME:${GITHUB_REF##*/} .
           fi
       
   push:
@@ -102,7 +102,7 @@ jobs:
           echo VERSION=$VERSION
  
       - name: Build image
-        run: docker buildx build . --file Dockerfile --cache-from type=local,src=/tmp/.buildx-cache type=local,mode=max,dest=/tmp/.buildx-cache-new --cache-to type=local,mode=max,dest=/tmp/.buildx-cache-new --tag $REPOSITORY_NAME:${GITHUB_REF##*/}
+        run: docker buildx build --file Dockerfile --cache-from type=local,src=/tmp/.buildx-cache type=local,mode=max,dest=/tmp/.buildx-cache-new --cache-to type=local,mode=max,dest=/tmp/.buildx-cache-new --tag $REPOSITORY_NAME:${GITHUB_REF##*/} .
 
       - name: Check container image with dive
         run: |
