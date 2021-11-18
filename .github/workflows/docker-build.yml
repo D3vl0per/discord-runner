@@ -17,7 +17,6 @@ jobs:
   scanning:
     name: GitGuardian scan
     runs-on: ubuntu-latest
-    if: github.ref != 'refs/heads/main'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -36,7 +35,6 @@ jobs:
     name: Test container build
     needs: scanning
     runs-on: ubuntu-latest
-    if: github.ref != 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
       
