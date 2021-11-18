@@ -14,7 +14,6 @@ env:
 jobs:
   scanning:
     name: GitGuardian scan
-    needs: setuo
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
